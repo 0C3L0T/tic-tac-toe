@@ -6,7 +6,13 @@
 
 :root {
     --cell-size: 100px;
-    --mark-size: calc(var(--cell-size) * .85); 
+    --mark-size: calc(var(--cell-size) * .85);
+    --dark-bg: #000000;
+    --light-bg: #F8F1FF;
+    --light-board: #25283D;
+    --dark-board: #D7CEB2;
+    --light-accent: #9E7B9B;
+    --dark-accent: #7D6F86;
 }
 
 
