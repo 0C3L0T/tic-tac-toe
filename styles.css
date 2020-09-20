@@ -6,7 +6,13 @@
 
 :root {
     --cell-size: 100px;
-    --mark-size: calc(var(--cell-size) * .85); 
+    --mark-size: calc(var(--cell-size) * .85);
+    --dark-bg: #000000;
+    --light-bg: #F8F1FF;
+    --light-board: #25283D;
+    --dark-board: #D7CEB2;
+    --light-accent: #9E7B9B;
+    --dark-accent: #7D6F86;
 }
 
 
@@ -146,6 +152,43 @@ body {
 .board.circle .cell:not(.x):not(.circle):hover::after {
     width: calc(var(--mark-size) * .7);
     height: calc(var(--mark-size) * .7);
+
     background-color: white;
 }
 
+.resultMessage {
+    display: none;
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background-color: rgba(0,0,0, .9);
+
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    color: white;
+    font-size: 5rem;
+}
+
+.resultMessage button {
+    font-size: 3rem;
+    background-color: white;
+    border: 1px solid black;
+    padding: .25em .5em;
+    cursor: pointer;
+}
+
+.resultMessage button:hover {
+    background-color: black;
+    color: white;
+    border-color: white;
+}
+
+.resultMessage.show {
+    display: flex;
+}

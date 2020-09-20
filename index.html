@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <title>boterkaaseneieren</title>
-    <!-- <script src="index.js" defer></script> -->
+    <script src="./dist/interface.js" defer></script>
 </head>
 <body>
 
 <!-- round picture, clickable, page overlay with link to pws and info -->
 
-    <div class="board circle" id="board">
-        <div class="cell x" data-cell></div>
-        <div class="cell circle" data-cell></div>
+    <div class="board" id="board">
+        <div class="cell" data-cell></div>
+        <div class="cell" data-cell></div>
         <div class="cell" data-cell></div>
         <div class="cell" data-cell></div>
         <div class="cell" data-cell></div>
@@ -25,7 +25,7 @@
     </div>
 
     <div class="resultMessage" id="resultMessage">
-        <div data-winning-message-text></div>
+        <div data-result-message-text></div>
         <button id="restartButton">Restart</button>
     </div>
 </body>
