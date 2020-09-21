@@ -23,28 +23,44 @@ var cellElements = document.querySelectorAll("[data-cell]");
 var resultMessageElement = document.getElementById('resultMessage');
 var resultMessageTextElement = document.querySelector('[data-result-message-text]');
 var restartButton = document.getElementById('restartButton');
-var circleTurn;
+var computerTurn;
 //start the game
 startGame();
 restartButton.addEventListener('click', startGame);
 function startGame() {
-    circleTurn = false;
+    computerTurn = false;
     cellElements.forEach(function (cell) {
         cell.classList.remove(X_CLASS);
         cell.classList.remove(CIRCLE_CLASS);
         cell.removeEventListener('click', handleClick);
         cell.addEventListener('click', handleClick, { once: true });
     });
-    setBoardHoverClass();
+    setBoardHoverClassToX();
     resultMessageElement.classList.remove('show');
 }
 function handleClick(e) {
     //only for human player    
     var cell = e.target;
     //allow for non-computer play
-    var currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS;
+    var currentClass = X_CLASS;
     placeMark(cell, currentClass);
-    if (checkWin(currentClass)) {
+    //check if game ends
+    if (checkWin(X_CLASS)) {
+        endGame(false);
+    }
+    else if (isDraw()) {
+        endGame(true);
+    }
+    else {
+        computerChoice(board);
+    }
+}
+function computerChoice(board) {
+    var bestMove = minimax(board);
+    var currentClass = CIRCLE_CLASS;
+    placeMark(bestMove, currentClass);
+    //check if game ends
+    if (checkWin(CIRCLE_CLASS)) {
         endGame(false);
     }
     else if (isDraw()) {
@@ -52,7 +68,6 @@ function handleClick(e) {
     }
     else {
         switchTurns();
-        setBoardHoverClass();
     }
 }
 function endGame(draw) {
@@ -60,7 +75,7 @@ function endGame(draw) {
         resultMessageTextElement.innerHTML = 'gelijkspel!';
     }
     else {
-        resultMessageTextElement.innerHTML = (circleTurn ? "O" : "X") + " WINT";
+        resultMessageTextElement.innerHTML = (computerTurn ? "O" : "X") + " WINT";
     }
     resultMessageElement.classList.add('show');
 }
@@ -69,25 +84,17 @@ function isDraw() {
         return cell.classList.contains(X_CLASS) || cell.classList.contains(CIRCLE_CLASS);
     });
 }
-function isEmpty(cell) {
-    return !cellElements[cell].classList.contains(CIRCLE_CLASS || X_CLASS);
-}
 //this function can also be called in the engine to place computerChoice
 function placeMark(cell, currentClass) {
     cell.classList.add(currentClass);
 }
 function switchTurns() {
-    circleTurn = !circleTurn;
+    computerTurn = !computerTurn;
 }
-function setBoardHoverClass() {
+function setBoardHoverClassToX() {
     board.classList.remove(X_CLASS);
     board.classList.remove(CIRCLE_CLASS);
-    if (circleTurn) {
-        board.classList.add(CIRCLE_CLASS);
-    }
-    else {
-        board.classList.add(X_CLASS);
-    }
+    board.classList.add(X_CLASS);
 }
 function checkWin(currentClass) {
     return WINNING_COMBINATIONS.some(function (combination) {

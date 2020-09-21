@@ -13,11 +13,12 @@ const WINNING_COMBINATIONS = [
 
 //very important
 const board = document.getElementById('board');
+
 const cellElements = document.querySelectorAll("[data-cell]");
 const resultMessageElement = document.getElementById('resultMessage');
 const resultMessageTextElement = document.querySelector('[data-result-message-text]');
 const restartButton = document.getElementById('restartButton');
-let circleTurn: boolean;
+let computerTurn: boolean;
 
 
 //start the game
@@ -26,7 +27,7 @@ restartButton.addEventListener('click', startGame)
 
 
 function startGame() {
-    circleTurn = false;
+    computerTurn = false;
 
     cellElements.forEach( cell => {
         cell.classList.remove(X_CLASS)
@@ -35,7 +36,7 @@ function startGame() {
         cell.addEventListener('click', handleClick, {once: true})
     })
 
-    setBoardHoverClass()
+    setBoardHoverClassToX()
     resultMessageElement.classList.remove('show')
 }
 
@@ -47,21 +48,37 @@ function handleClick(e) {
     const cell = e.target;
 
     //allow for non-computer play
-    const currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS;
+    const currentClass = X_CLASS;
 
     placeMark(cell, currentClass)
 
-    if(checkWin(currentClass)) {
+
+    //check if game ends
+    if(checkWin(X_CLASS)) {
+        endGame(false)
+    } else if (isDraw()) {
+        endGame(true)
+    } else {
+        computerChoice(board)
+    }
+}
+
+function computerChoice(board) {
+
+    const bestMove = minimax(board)
+    const currentClass = CIRCLE_CLASS;
+
+    placeMark(bestMove, currentClass)
+
+    //check if game ends
+    if(checkWin(CIRCLE_CLASS)) {
         endGame(false)
     } else if (isDraw()) {
         endGame(true)
     } else {
         switchTurns()
-        setBoardHoverClass()
     }
-
 }
-
 
 
 
@@ -69,7 +86,7 @@ function endGame(draw) {
     if (draw) {
         resultMessageTextElement.innerHTML = 'gelijkspel!'
     } else {
-        resultMessageTextElement.innerHTML = `${circleTurn ? "O" : "X"} WINT`
+        resultMessageTextElement.innerHTML = `${computerTurn ? "O" : "X"} WINT`
     }
     resultMessageElement.classList.add('show')
 }
@@ -80,10 +97,6 @@ function isDraw() {
     }) 
 }
 
-function isEmpty(cell) {
-
-    return !cellElements[cell].classList.contains(CIRCLE_CLASS || X_CLASS)
-}
 
 //this function can also be called in the engine to place computerChoice
 function placeMark(cell, currentClass) {
@@ -92,19 +105,14 @@ function placeMark(cell, currentClass) {
 
 
 function switchTurns() {
-    circleTurn = !circleTurn;
+    computerTurn = !computerTurn;
 }
 
-function setBoardHoverClass() {
+function setBoardHoverClassToX() {
     board.classList.remove(X_CLASS);
     board.classList.remove(CIRCLE_CLASS);
 
-    if (circleTurn) {
-        board.classList.add(CIRCLE_CLASS);
-    }
-    else {
-        board.classList.add(X_CLASS);
-    }
+    board.classList.add(X_CLASS);
 }
 
 function checkWin(currentClass) {

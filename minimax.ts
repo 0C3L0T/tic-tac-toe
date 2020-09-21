@@ -1,10 +1,11 @@
-//takes in cellElements and currentTurn, returns computerChoice
+minimax(board) {
+
+    //get board
+
+    //loop over every possible move recursively, count wins 
+
+    //output cell of move with highest wins
 
 
-//get gameState from interface
-
-//define advantageous positions
-
-//check which move will be most advantageous
-
-//return cell as computerChoice
+    
+}
