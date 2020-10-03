@@ -8,7 +8,6 @@ const resultMessageElement = document.getElementById('resultMessage');
 const resultMessageTextElement = document.querySelector('[data-result-message-text]');
 const restartButton = document.getElementById('restartButton');
 
-let currentPlayer = 'computer';
 
 //if restartbutton is pressed, execute initialize function
 restartButton.addEventListener('click', initialize);
@@ -56,22 +55,29 @@ export function updateBoard() {
 
 function computerTurn() {
     console.log(`computer turn`)
-
-
     updateBoard()
+
+    let move;
+
     //do the minimax, get as output a board index and place there the mark
-    let bestMove = minimax(board, true, 3)
+    let bestScore = -Infinity;
+  
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if (board[i][j].classList.item(1) == undefined) {
+          placeMark(O_CLASS, board[i][j])
+          let score = minimax(board, 0, false);
+          removeMark(O_CLASS, board[i][j])
+          if (score > bestScore) {
+            move = {i:i, j:j}
+          }
 
-    //let bestMove = board[0][0]
-
-    placeMark(O_CLASS, bestMove)
+        }
+      }
+    }
+    placeMark(O_CLASS, board[move.i][move.j])
 
     checkEnd()
-
-    currentPlayer = 'human';
-
-    humanTurn()
-
 }
 
 //use input from eventlistener
@@ -79,18 +85,25 @@ function humanTurn(e) {
     console.log(`human turn`)
 
     let cell = e.target;
+
     placeMark(X_CLASS, cell)
+
     checkEnd()
-    currentPlayer = 'computer';
+
     computerTurn()
 }
 
 
 
 //alow for both indexes as cell to be inputs
-export default function placeMark(currentClass, cell) {
+export function placeMark(currentClass, cell) {
     cell.classList.add(currentClass)
     cell.removeEventListener('click', humanTurn )
+}
+
+export function removeMark(currentClass, cell) {
+  cell.classList.remove(currentClass)
+  cell.addEventListener('click', humanTurn)
 }
 
 function checkEnd() {
