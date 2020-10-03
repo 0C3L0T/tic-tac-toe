@@ -1,3 +1,5 @@
+import { minimax } from "./minimax";
+
 const X_CLASS = 'x';
 const CIRCLE_CLASS = 'circle';
 const WINNING_COMBINATIONS = [
@@ -21,13 +23,15 @@ const restartButton = document.getElementById('restartButton');
 let computerTurn: boolean;
 
 
+
 //start the game
 startGame()
-restartButton.addEventListener('click', startGame)
+restartButton.addEventListener('click', startGame);
 
 
 function startGame() {
-    computerTurn = false;
+    computerTurn = true;
+
 
     cellElements.forEach( cell => {
         cell.classList.remove(X_CLASS)
@@ -36,59 +40,42 @@ function startGame() {
         cell.addEventListener('click', handleClick, {once: true})
     })
 
-    setBoardHoverClassToX()
-    resultMessageElement.classList.remove('show')
+    resultMessageElement.classList.remove('show');
 }
-
-
 
 
 function handleClick(e) {
-    //only for human player    
+    computerTurn = false;
+
+    //only for human player, how to enable for computer play?    
     const cell = e.target;
 
-    //allow for non-computer play
-    const currentClass = X_CLASS;
-
-    placeMark(cell, currentClass)
+    placeMark(cell, X_CLASS);
 
 
-    //check if game ends
-    if(checkWin(X_CLASS)) {
-        endGame(false)
-    } else if (isDraw()) {
-        endGame(true)
-    } else {
-        computerChoice(board)
-    }
+    //check for endgame
 }
 
-function computerChoice(board) {
+function computerChoice() {
+    computerTurn = true;
+    let bestScore = -Infinity;
+    let bestMove;
 
-    const bestMove = minimax(board)
-    const currentClass = CIRCLE_CLASS;
+    cellElements.forEach(cell => {
+        if (cell.classList.length == 1) {
+            let score = minimax(cellElements, true, 3)
+            if (score > bestScore) {
+                bestScore = score;
+                bestMove = cell;
+            }
+        }
+    })
 
-    placeMark(bestMove, currentClass)
+
+    placeMark(bestMove, CIRCLE_CLASS);
 
     //check if game ends
-    if(checkWin(CIRCLE_CLASS)) {
-        endGame(false)
-    } else if (isDraw()) {
-        endGame(true)
-    } else {
-        switchTurns()
-    }
-}
 
-
-
-function endGame(draw) {
-    if (draw) {
-        resultMessageTextElement.innerHTML = 'gelijkspel!'
-    } else {
-        resultMessageTextElement.innerHTML = `${computerTurn ? "O" : "X"} WINT`
-    }
-    resultMessageElement.classList.add('show')
 }
 
 function isDraw() {
@@ -97,28 +84,51 @@ function isDraw() {
     }) 
 }
 
-
-//this function can also be called in the engine to place computerChoice
-function placeMark(cell, currentClass) {
-    cell.classList.add(currentClass)
-}
-
-
-function switchTurns() {
-    computerTurn = !computerTurn;
-}
-
-function setBoardHoverClassToX() {
-    board.classList.remove(X_CLASS);
-    board.classList.remove(CIRCLE_CLASS);
-
-    board.classList.add(X_CLASS);
-}
-
 function checkWin(currentClass) {
     return WINNING_COMBINATIONS.some(combination => {
         return combination.every(index => {
             return cellElements[index].classList.contains(currentClass)
         })
     })
+}
+
+
+//check if the game is won or tied, return winning class or null
+function checkWinner(currentClass): string {
+    //return winner or draw as result
+
+    if ([...cellElements].every(cell => {
+        cell.classList.contains(X_CLASS) || cell.classList.contains(CIRCLE_CLASS)})) {
+        return 'draw';
+    } 
+    
+    else if(WINNING_COMBINATIONS.some(combination => {
+        combination.every(index => {
+            cellElements[index].classList.contains(currentClass)
+            })
+        })) {
+            return currentClass;
+        }
+    }
+    
+
+    //call endgame
+}
+
+
+
+
+//this function can also be called to place computerChoice
+function placeMark(cell, currentClass) {
+    cell.classList.add(currentClass)
+}
+
+
+function endGame(result) {
+    if (result == 'draw') {
+        resultMessageTextElement.innerHTML = 'gelijkspel!';
+    } else {
+        resultMessageTextElement.innerHTML = `${computerTurn ? "O" : "X"} WINT`;
+    }
+    resultMessageElement.classList.add('show');
 }
