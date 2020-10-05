@@ -1,17 +1,18 @@
-import {checkWinner, X_CLASS, O_CLASS, placeMark, removeMark} from "./interface2.js";
+import { checkWinner, X_CLASS, O_CLASS, placeMark, removeMark } from "./interface2.js";
 
 let scores = {
-  X: 10,
-  O: -10,
-  tie: 0
+  'X': 10,
+  'O': -10,
+  'draw': 0
 };
 
 export default function minimax(board, isMaximizing, depth) {
   console.log(`started minimax at depth ${depth}`)
-  
+
   //if a result is found, return corresponding score
   let result = checkWinner();
-  if (result !== null || depth > 4) {
+  if (result != null) {
+    //scores doesn't have an index of cell
     return scores[result];
   }
 

@@ -18,19 +18,19 @@ initialize()
 
 //clean board and add eventlisteners
 function initialize() {
-    
-    resultMessageElement.classList.remove('show');
-    console.log(`removing result message`);
 
-    cellElements.forEach( cell => {
-        cell.classList.remove(X_CLASS)
-        cell.classList.remove(O_CLASS)
-        cell.removeEventListener('click', humanTurn)
-        cell.addEventListener('click', humanTurn, {once: true})
-    })
-    console.log(`initialized`)
+  resultMessageElement.classList.remove('show');
+  console.log(`removing result message`);
 
-    computerTurn()
+  cellElements.forEach(cell => {
+    cell.classList.remove(X_CLASS)
+    cell.classList.remove(O_CLASS)
+    cell.removeEventListener('click', humanTurn)
+    cell.addEventListener('click', humanTurn, { once: true })
+  })
+  console.log(`initialized`)
+
+  computerTurn()
 }
 
 
@@ -39,66 +39,69 @@ function initialize() {
 
 
 export function updateBoard() {
-    //fill board array with 3 arrays, containing the corresponding three elements in the row
-    board = []
-    board = [
-        [...cellElements].slice(0,3),
-        [...cellElements].slice(3,6),
-        [...cellElements].slice(6,9)
-    ];
-    console.log(`board array updated`)
-    console.log(board)
-    
+  //fill board array with 3 arrays, containing the corresponding three elements in the row
+  board = []
+  board = [
+    [...cellElements].slice(0, 3),
+    [...cellElements].slice(3, 6),
+    [...cellElements].slice(6, 9)
+  ];
+  console.log(`board array updated`)
+  console.log(board)
+
 }
 
 
 
 function computerTurn() {
-    console.log(`computer turn`)
-    updateBoard()
+  console.log(`computer turn`)
+  updateBoard()
 
-    let move;
+  let move;
 
-    //do the minimax, get as output a board index and place there the mark
-    let bestScore = -Infinity;
-  
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        if (board[i][j].classList.item(1) == undefined) {
-          placeMark(O_CLASS, board[i][j])
-          let score = minimax(board, 0, false);
-          removeMark(O_CLASS, board[i][j])
-          if (score > bestScore) {
-            move = {i:i, j:j}
-          }
+  //do the minimax, get as output a board index and place there the mark
+  let bestScore = -Infinity;
+  let row;
+  let collumn;
 
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (board[i][j].classList.item(1) == undefined) {
+        placeMark(O_CLASS, board[i][j])
+        let score = minimax(board, false, 0);
+        removeMark(O_CLASS, board[i][j])
+        if (score > bestScore) {
+          row = i;
+          collumn = j;
         }
+
       }
     }
-    placeMark(O_CLASS, board[move.i][move.j])
+  }
+  placeMark(O_CLASS, board[row][collumn])
 
-    checkEnd()
+  checkEnd()
 }
 
 //use input from eventlistener
 function humanTurn(e) {
-    console.log(`human turn`)
+  console.log(`human turn`)
 
-    let cell = e.target;
+  let cell = e.target;
 
-    placeMark(X_CLASS, cell)
+  placeMark(X_CLASS, cell)
 
-    checkEnd()
+  checkEnd()
 
-    computerTurn()
+  computerTurn()
 }
 
 
 
 //alow for both indexes as cell to be inputs
 export function placeMark(currentClass, cell) {
-    cell.classList.add(currentClass)
-    cell.removeEventListener('click', humanTurn )
+  cell.classList.add(currentClass)
+  cell.removeEventListener('click', humanTurn)
 }
 
 export function removeMark(currentClass, cell) {
@@ -107,67 +110,67 @@ export function removeMark(currentClass, cell) {
 }
 
 function checkEnd() {
-    let result = checkWinner();
-    if (result != null) {
-        showWin(result);
-    }
+  let result = checkWinner();
+  if (result != null) {
+    showWin(result);
+  }
 }
 
-//check if game is draw or won, return draw or winning player and call showWin() with result
+//check if game is draw or won, return 'X', 'O', 'draw' or null
 export function checkWinner() {
-    let winner = null;
-  
-    // horizontal
-    for (let i = 0; i < 3; i++) {
-      if (equals3(board[i][0], board[i][1], board[i][2])) {
-        winner = board[i][0];
-      }
-    }
-  
-    // Vertical
-    for (let i = 0; i < 3; i++) {
-      if (equals3(board[0][i], board[1][i], board[2][i])) {
-        winner = board[0][i];
-      }
-    }
-  
-    // Diagonal
-    if (equals3(board[0][0], board[1][1], board[2][2])) {
-      winner = board[0][0];
-    }
-    if (equals3(board[2][0], board[1][1], board[0][2])) {
-      winner = board[2][0];
-    }
-  
-    let openSpots = 0;
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        if (board[i][j].classList.item(1) == undefined) {
-          openSpots++;
-        }
-      }
-    }
-  
-    if (winner == null && openSpots == 0) {
-      return 'draw';
-    } else {
-      return winner;
+  let winner = null;
+
+  // horizontal
+  for (let i = 0; i < 3; i++) {
+    if (equals3(board[i][0], board[i][1], board[i][2])) {
+      winner = board[i][0];
     }
   }
 
+  // Vertical
+  for (let i = 0; i < 3; i++) {
+    if (equals3(board[0][i], board[1][i], board[2][i])) {
+      winner = board[0][i];
+    }
+  }
+
+  // Diagonal
+  if (equals3(board[0][0], board[1][1], board[2][2])) {
+    winner = board[0][0];
+  }
+  if (equals3(board[2][0], board[1][1], board[0][2])) {
+    winner = board[2][0];
+  }
+
+  let openSpots = 0;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (board[i][j].classList.item(1) == undefined) {
+        openSpots++;
+      }
+    }
+  }
+
+  if (winner == null && openSpots == 0) {
+    return 'draw';
+  } else {
+    return winner;
+  }
+}
+
 
 function equals3(a, b, c) {
-    return a == b && b == c && a != '';
+  return a == b && b == c && a != '';
 }
-  
+
 
 
 //interface the result to the html
 function showWin(result) {
-    if (result == 'draw') {
-        resultMessageTextElement.innerHTML = 'gelijkspel!';
-    } else {
-        resultMessageTextElement.innerHTML = `${result ? O_CLASS : X_CLASS} WINT`;
-    }
-    resultMessageElement.classList.add('show');
+  if (result == 'draw') {
+    resultMessageTextElement.innerHTML = 'gelijkspel!';
+  } else {
+    resultMessageTextElement.innerHTML = `${result ? O_CLASS : X_CLASS} WINT`;
+  }
+  resultMessageElement.classList.add('show');
 }
