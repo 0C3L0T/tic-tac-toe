@@ -1,4 +1,4 @@
-import { checkWinner, X_CLASS, O_CLASS, placeMark, removeMark } from "./interface2.js";
+import { isEmpty, checkWinner, X_CLASS, O_CLASS, placeMark, removeMark } from "./interface2.js";
 
 let scores = {
   'X': 10,
@@ -6,11 +6,36 @@ let scores = {
   'draw': 0
 };
 
+function bestMove() {
+  let bestScore = -Infinity;
+  let move = {};
+
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+
+      if (isEmpty(board[i][j])) {
+        placeMark()
+        let score = minimax(board, false, 0);
+        removeMark()
+
+        if (score > bestScore) {
+          move.i = i;
+          move.j = j
+        }
+
+      }
+    }
+  }
+}
 export default function minimax(board, isMaximizing, depth) {
   console.log(`started minimax at depth ${depth}`)
 
   //if a result is found, return corresponding score
-  let result = checkWinner();
+  let result = 'X';
+  console.log(`result is ${result}`)
+
+
+  
   if (result != null) {
     //scores doesn't have an index of cell
     return scores[result];
@@ -21,10 +46,10 @@ export default function minimax(board, isMaximizing, depth) {
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         // If spot is available, try spot
-        if (board[i][j].classList.item(1) == undefined) {
-          placeMark(O_CLASS, board[i][j])
+        if (isEmpty()) {
+          placeMark()
           let score = minimax(board, false, depth + 1);
-          removeMark(O_CLASS, board[i][j])
+          removeMark()
           bestScore = Math.max(score, bestScore);
         }
       }
@@ -35,10 +60,10 @@ export default function minimax(board, isMaximizing, depth) {
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
         // If spot is available, try spot
-        if (board[i][j].classList.item(1) == undefined) {
-          placeMark(X_CLASS, board[i][j])
+        if (isEmpty()) {
+          placeMark()
           let score = minimax(board, true, depth + 1);
-          removeMark(X_CLASS, board[i][j])
+          removeMark()
           bestScore = Math.min(score, bestScore);
         }
       }
