@@ -6,7 +6,7 @@ let scores = {
   'draw': 0
 };
 
-function bestMove() {
+export default function bestMove(board) {
   let bestScore = -Infinity;
   let move = {};
 
@@ -14,7 +14,7 @@ function bestMove() {
     for (let j = 0; j < 3; j++) {
 
       if (isEmpty(board[i][j])) {
-        placeMark()
+        placeMark(O_CLASS, i, j)
         let score = minimax(board, false, 0);
         removeMark()
 
@@ -26,16 +26,18 @@ function bestMove() {
       }
     }
   }
+  return move;
 }
-export default function minimax(board, isMaximizing, depth) {
+
+function minimax(board, isMaximizing, depth) {
   console.log(`started minimax at depth ${depth}`)
 
   //if a result is found, return corresponding score
-  let result = 'X';
+  let result = checkWinner();
   console.log(`result is ${result}`)
 
 
-  
+
   if (result != null) {
     //scores doesn't have an index of cell
     return scores[result];

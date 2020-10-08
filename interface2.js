@@ -1,4 +1,5 @@
 import minimax from "./minimax.js";
+import checkWinner from "./checkWinner";
 
 export const X_CLASS = "x";
 export const O_CLASS = "O";
@@ -13,6 +14,7 @@ const restartButton = document.getElementById('restartButton');
 restartButton.addEventListener('click', initialize);
 
 export let board = [];
+let cells = [];
 
 initialize()
 
@@ -34,31 +36,52 @@ function initialize() {
 }
 
 
-
 export function updateBoard() {
   //fill board array with 3 arrays, containing the corresponding three elements in the row
-  //should consists of X, O or ''
-  board = []
-  
+  cells = []
+
+  cells = [
+    [...cellElements].slice(0, 3),
+    [...cellElements].slice(3, 6),
+    [...cellElements].slice(6, 9)
+
+  ]
+
+
+  board = [];
+
+  board = cells.forEach(array => {
+    array.map(checkCell(cell))
+  });
+
+
   console.log(`board array updated`)
   console.log(board)
-
 }
+
+
+function checkCell(cell) {
+  if (cell.classList.contains('X')) {
+    return 'X';
+  } else if (cell.classList.contains('O')) {
+    return 'O';
+  } else {
+    return '';
+  }
+}
+
 
 function computerTurn() {
   console.log(`computer turn`)
+
   updateBoard()
 
+  let move = bestMove(board);
 
-  //do the minimax, get as output a board index and place there the mark
-  let move = bestMove()
-
-  placeMark()
+  placeMark(O_CLASS, move.i, move.j)
 
   checkEnd()
 }
-
-
 
 //use input from eventlistener
 function humanTurn(e) {
@@ -66,7 +89,7 @@ function humanTurn(e) {
 
   let cell = e.target;
 
-  placeMark()
+  placeMark(X_CLASS, cell)
 
   checkEnd()
 
@@ -76,20 +99,15 @@ function humanTurn(e) {
 
 
 //alow for both indexes as cell to be inputs
-export function placeMark() {
-
-  cellBoard[i][j].removeEventListener('click', humanTurn)
+export function placeMark(currentClass, i, j) {
+  cell.classList.add(currentClass)
+  cell.removeEventListener('click', humanTurn)
 }
 
-export function removeMark() {
-  
-  cellBoard[i][j].addEventListener('click', humanTurn)
+export function removeMark(currentClass, cell) {
+  cell.classList.remove(currentClass)
+  cell.addEventListener('click', humanTurn)
 }
-
-
-export function isEmpty(cell) {
-
-} 
 
 function checkEnd() {
   let result = checkWinner();
@@ -107,4 +125,3 @@ function showWin(result) {
   }
   resultMessageElement.classList.add('show');
 }
-
