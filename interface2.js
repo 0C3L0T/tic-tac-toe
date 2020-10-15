@@ -1,7 +1,7 @@
-import minimax from "./minimax.js";
-import checkWinner from "./checkWinner";
+import  { bestMove, checkWinner} from "./src/minimax.js";
+//import checkWinner from "./checkWinner.js";
 
-export const X_CLASS = "x";
+export const X_CLASS = "X";
 export const O_CLASS = "O";
 
 const cellElements = document.querySelectorAll("[data-cell]");
@@ -13,8 +13,13 @@ const restartButton = document.getElementById('restartButton');
 //if restartbutton is pressed, execute initialize function
 restartButton.addEventListener('click', initialize);
 
-export let board = [];
-let cells = [];
+let board = [
+  [...cellElements].slice(0, 3),
+  [...cellElements].slice(3, 6),
+  [...cellElements].slice(6, 9)
+]
+export default board;
+
 
 initialize()
 
@@ -28,57 +33,20 @@ function initialize() {
     cell.classList.remove(X_CLASS)
     cell.classList.remove(O_CLASS)
     cell.removeEventListener('click', humanTurn)
-    cell.addEventListener('click', humanTurn, { once: true })
+    cell.addEventListener('click', humanTurn)
   })
   console.log(`initialized`)
 
+  //begin with computer turn
   computerTurn()
 }
-
-
-export function updateBoard() {
-  //fill board array with 3 arrays, containing the corresponding three elements in the row
-  cells = []
-
-  cells = [
-    [...cellElements].slice(0, 3),
-    [...cellElements].slice(3, 6),
-    [...cellElements].slice(6, 9)
-
-  ]
-
-
-  board = [];
-
-  board = cells.forEach(array => {
-    array.map(checkCell(cell))
-  });
-
-
-  console.log(`board array updated`)
-  console.log(board)
-}
-
-
-function checkCell(cell) {
-  if (cell.classList.contains('X')) {
-    return 'X';
-  } else if (cell.classList.contains('O')) {
-    return 'O';
-  } else {
-    return '';
-  }
-}
-
 
 function computerTurn() {
   console.log(`computer turn`)
 
-  updateBoard()
 
   let move = bestMove(board);
-
-  placeMark(O_CLASS, move.i, move.j)
+  board[move.i][move.j].removeEventListener('click', humanTurn)
 
   checkEnd()
 }
@@ -88,26 +56,16 @@ function humanTurn(e) {
   console.log(`human turn`)
 
   let cell = e.target;
+  console.log(cell)
 
-  placeMark(X_CLASS, cell)
+  cell.classList.add(X_CLASS)
+  cell.removeEventListener('click', humanTurn)
 
   checkEnd()
 
   computerTurn()
 }
 
-
-
-//alow for both indexes as cell to be inputs
-export function placeMark(currentClass, i, j) {
-  cell.classList.add(currentClass)
-  cell.removeEventListener('click', humanTurn)
-}
-
-export function removeMark(currentClass, cell) {
-  cell.classList.remove(currentClass)
-  cell.addEventListener('click', humanTurn)
-}
 
 function checkEnd() {
   let result = checkWinner();
@@ -120,8 +78,9 @@ function checkEnd() {
 function showWin(result) {
   if (result == 'draw') {
     resultMessageTextElement.innerHTML = 'gelijkspel!';
-  } else {
-    resultMessageTextElement.innerHTML = `${result ? 'O' : 'X'} WINT`;
+  } else  {
+    resultMessageTextElement.innerHTML = `${result} WINT!`;
   }
   resultMessageElement.classList.add('show');
 }
+

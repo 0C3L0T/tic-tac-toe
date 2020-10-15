@@ -1,11 +1,11 @@
 *, *::after, *::before {
-    box-sizing: border-box;
+    boX-sizing: border-boX;
 }
 
 /*make some variables for height, width and maybe colorscheme?*/
 
 :root {
-    --cell-size: 100px;
+    --cell-size: 100pX;
     --mark-size: calc(var(--cell-size) * .85);
     --dark-bg: #000000;
     --light-bg: #F8F1FF;
@@ -38,9 +38,9 @@ body {
 
 
     /*change here*/
-    border: 3px solid black;
+    border: 3pX solid black;
 
-    display: flex;
+    display: fleX;
     justify-content: center;
     align-items: center;
 
@@ -49,7 +49,7 @@ body {
     cursor: pointer;
 }
 
-.cell.x,
+.cell.X,
 .cell.O {
     cursor: not-allowed;
 }
@@ -79,10 +79,10 @@ body {
 
 
 
-/*x code*/
+/*X code*/
 
-.cell.x::before,
-.cell.x::after,
+.cell.X::before,
+.cell.X::after,
 
 .cell.O::before {
     /*change here*/
@@ -91,19 +91,19 @@ body {
 
 
 
-.board.x .cell:not(.x):not(.O):hover::before,
-.board.x .cell:not(.x):not(.O):hover::after,
-.board.O .cell:not(.x):not(.O):hover::before {
+.board.X .cell:not(.X):not(.O):hover::before,
+.board.X .cell:not(.X):not(.O):hover::after,
+.board.O .cell:not(.X):not(.O):hover::before {
     /*change here*/
     background-color: lightgrey;
 }
 
 
-.cell.x::before,
-.cell.x::after,
+.cell.X::before,
+.cell.X::after,
 
-.board.x .cell:not(.x):not(.O):hover::before,
-.board.x .cell:not(.x):not(.O):hover::after {
+.board.X .cell:not(.X):not(.O):hover::before,
+.board.X .cell:not(.X):not(.O):hover::after {
     content: '';
 
     position: absolute;
@@ -112,13 +112,13 @@ body {
     height: var(--mark-size);
 }
 
-.cell.x::before,
-.board.x .cell:not(.x):not(.O):hover::before {
+.cell.X::before,
+.board.X .cell:not(.X):not(.O):hover::before {
     transform: rotate(45deg);
 }
 
-.cell.x::after,
-.board.x .cell:not(.x):not(.O):hover::after {
+.cell.X::after,
+.board.X .cell:not(.X):not(.O):hover::after {
     transform: rotate(-45deg);
 }
 
@@ -132,8 +132,8 @@ body {
 .cell.O::before,
 .cell.O::after,
 
-.board.O .cell:not(.x):not(.O):hover::before,
-.board.O .cell:not(.x):not(.O):hover::after {
+.board.O .cell:not(.X):not(.O):hover::before,
+.board.O .cell:not(.X):not(.O):hover::after {
     content: '';
 
     position: absolute;
@@ -142,14 +142,14 @@ body {
 }
 
 .cell.O::before,
-.board.O .cell:not(.x):not(.O):hover::before {
+.board.O .cell:not(.X):not(.O):hover::before {
     width: var(--mark-size);
     height: var(--mark-size);
 
 }
 
 .cell.O::after,
-.board.O .cell:not(.x):not(.O):hover::after {
+.board.O .cell:not(.X):not(.O):hover::after {
     width: calc(var(--mark-size) * .7);
     height: calc(var(--mark-size) * .7);
 
@@ -158,7 +158,7 @@ body {
 
 .resultMessage {
     display: none;
-    position: fixed;
+    position: fiXed;
 
     top: 0;
     left: 0;
@@ -169,7 +169,7 @@ body {
 
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+    fleX-direction: column;
 
     color: white;
     font-size: 5rem;
@@ -178,7 +178,7 @@ body {
 .resultMessage button {
     font-size: 3rem;
     background-color: white;
-    border: 1px solid black;
+    border: 1pX solid black;
     padding: .25em .5em;
     cursor: pointer;
 }
@@ -190,5 +190,5 @@ body {
 }
 
 .resultMessage.show {
-    display: flex;
+    display: fleX;
 }
