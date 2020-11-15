@@ -8,35 +8,35 @@ function equalsThree(a, b, c) {
   return a != '' && a == b && b == c ;
 }
 
-export function checkWinner(board) {
+export function checkWinner(boardState) {
   //should always return either none, draw, O or X
   let winner = 'none';
   let emptySquares = 0;
 
   //diagonally RL
-  if (equalsThree(board[0][0], board[1][1], board[2][2])) {
-    winner = board[0][0];
+  if (equalsThree(boardState[0][0], boardState[1][1], boardState[2][2])) {
+    winner = boardState[0][0];
   }
 
   //diagonally LR
-  if (equalsThree(board[0][2], board[1][1], board[2][0])) {
-    winner = board[0][2];
+  if (equalsThree(boardState[0][2], boardState[1][1], boardState[2][0])) {
+    winner = boardState[0][2];
   }
 
   for (let i = 0; i<3; i++) {
     //horizontally
-    if (equalsThree(board[i][0], board[i][1], board[i][2])) {
-      winner = board[i][0];
+    if (equalsThree(boardState[i][0], boardState[i][1], boardState[i][2])) {
+      winner = boardState[i][0];
     }
 
     //vertically
-    if (equalsThree(board[0][i], board[1][i], board[2][i])) {
-      winner = board[0][i];
+    if (equalsThree(boardState[0][i], boardState[1][i], boardState[2][i])) {
+      winner = boardState[0][i];
     }
 
     //check for empty squares
     for (let j = 0; j<3; j++) {
-      if (board[i][j] == '') {
+      if (boardState[i][j] == '') {
         emptySquares++
       }
     }
@@ -52,12 +52,9 @@ export function checkWinner(board) {
 
 export function bestMove(board) {
   console.log("calculating best move..")
-
+  console.log(board)
   let bestScore = -Infinity;
-  let output = {
-    'row' : null,
-    'col' : null
-  };
+  let move;
 
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
@@ -69,15 +66,17 @@ export function bestMove(board) {
 
         if (score > bestScore) {
           bestScore = score;
-          output.row = i;
-          output.col = j;
+          move = {i, j};
         }
       }
     }
   }
-  return output;
-  
+  return move;
 }
+
+// function minimax(board, isMaximizing, depth) {
+//   return 10
+// }
 
 function minimax(board, isMaximizing, depth) {
   console.log(`running minimax at depth ${depth}`)

@@ -17,6 +17,7 @@ let board = [
     ['', '', '']
 ];
 
+
 function drawBoard() {
     console.log('drawing board')
     for (let row = 0; row < 3; row++) {
@@ -34,7 +35,6 @@ function drawBoard() {
 }
 
 function init(){
-    
     resultMessageElement.classList.remove('show');
     
     clearBoard()
@@ -67,7 +67,7 @@ function clearBoard(){
 function computerTurn() {
     console.log('computer turn')
     let move = bestMove(board)
-    //board[move.row][move.col] = 'O';
+    board[move.i][move.j] = 'O';
 
     //board[0][0] = 'O';
     // board[0][1] = 'O';
@@ -79,6 +79,7 @@ function computerTurn() {
     // board[2][1] = 'O';
     // board[2][2] = 'X';
     //console.log(board)
+
     drawBoard()
     checkEnd()
 }
