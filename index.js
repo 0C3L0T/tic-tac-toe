@@ -1,10 +1,10 @@
-import {bestMove, checkWinner} from "./minimax.js"
+import { bestMove, checkWinner } from "./minimax.js"
 
 const restartButton = document.getElementById('restartButton');
 const cells = [
-    [...document.querySelectorAll("[data-cell]")].slice(0,3),
-    [...document.querySelectorAll("[data-cell]")].slice(3,6),
-    [...document.querySelectorAll("[data-cell]")].slice(6,9)
+    [...document.querySelectorAll("[data-cell]")].slice(0, 3),
+    [...document.querySelectorAll("[data-cell]")].slice(3, 6),
+    [...document.querySelectorAll("[data-cell]")].slice(6, 9)
 ];
 const resultMessageElement = document.getElementById('resultMessage');
 const resultMessageTextElement = document.querySelector('[data-result-message-text]');
@@ -34,9 +34,9 @@ function drawBoard() {
     }
 }
 
-function init(){
+function init() {
     resultMessageElement.classList.remove('show');
-    
+
     clearBoard()
     console.log(board)
     drawBoard()
@@ -44,7 +44,7 @@ function init(){
 
 }
 
-function clearBoard(){
+function clearBoard() {
     //clear all onclickevents from cells
     //clear board array
     //add onclickevents to cells
@@ -66,8 +66,14 @@ function clearBoard(){
 //minimax inmplementation, takes board and outputs best move
 function computerTurn() {
     console.log('computer turn')
-    let move = bestMove(board)
-    board[move.i][move.j] = 'O';
+
+    if (board[0][0] == '') {
+        board[0][0] = 'O';
+    } else {
+        let move = bestMove(board)
+        board[move.i][move.j] = 'O';
+    }
+
 
     //board[0][0] = 'O';
     // board[0][1] = 'O';
@@ -87,7 +93,7 @@ function computerTurn() {
 //event handler
 function onCellClick() {
     console.log('cell clicked')
-    let  cellNode = this;
+    let cellNode = this;
 
     //get row and col from cellNode
     var row = cellNode.dataset.row;
@@ -105,12 +111,12 @@ function checkEnd() {
 
     if (result != 'none') {
         if (result == 'draw') {
-          resultMessageTextElement.innerHTML = 'gelijkspel!';
-        } else  {
-          resultMessageTextElement.innerHTML = `${result} WINT!`;
+            resultMessageTextElement.innerHTML = 'gelijkspel!';
+        } else {
+            resultMessageTextElement.innerHTML = `${result} WINT!`;
         }
         resultMessageElement.classList.add('show');
-      }
+    }
 
 }
 
